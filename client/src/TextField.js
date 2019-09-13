@@ -1,8 +1,20 @@
 import React from 'react';
 import './App.css';
 
-function TextField() {
-	return <textarea className="Text-field" maxLength="110" />;
+class TextField extends React.Component {
+	constructor(props) {
+		super(props);
+		this.handleChange = this.handleChange.bind(this);
+	}
+
+	handleChange(e) {
+		this.props.onInputChange(e.target.value);
+	}
+
+	render() {
+		const text = this.props.text;
+		return <textarea className="Text-field" maxLength="110" value={text} onChange={this.handleChange} />;
+	}
 }
 
 export default TextField;
