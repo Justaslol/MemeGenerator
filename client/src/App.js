@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import logo from "./logo.svg";
 import "./App.css";
 import imgMeme from "./img/womanyellingcat.jpg";
@@ -9,9 +10,10 @@ class App extends React.Component {
     super(props);
     this.handleWomanInput = this.handleWomanInput.bind(this);
     this.handleCatInput = this.handleCatInput.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
-      woman_text: "Meme Generator: YOU CANNOT LEAVE TEXT FIELDS EMPTY",
-      cat_text: "*Me just testing the Submit button*"
+      woman_text: "",
+      cat_text: ""
     };
   }
 
@@ -25,6 +27,30 @@ class App extends React.Component {
     this.setState({
       cat_text: textInput
     });
+  }
+
+  handleSubmit() {
+    if (this.state.woman_text === "" || this.state.cat_text === "") {
+      axios
+        .get("http://localhost:4000/", {
+          params: {
+            woman: "Meme Generator: YOU CANNOT LEAVE TEXT FIELDS EMPTY",
+            cat: "*Me just testing the Submit button*"
+          }
+        })
+        .then(response => console.log(response.data))
+        .catch(err => console.log(err));
+    } else {
+      axios
+        .get("http://localhost:4000/", {
+          params: {
+            woman: this.state.woman_text,
+            cat: this.state.cat_text
+          }
+        })
+        .then(response => console.log(response.data))
+        .catch(err => console.log(err));
+    }
   }
 
   render() {
@@ -45,17 +71,19 @@ class App extends React.Component {
                 className="Text-field"
                 text={this.state.woman_text}
                 onInputChange={this.handleWomanInput}
+                placehold="Enter Your Text Here"
               />
               <TextField
                 className="Text-field"
                 text={this.state.cat_text}
                 onInputChange={this.handleCatInput}
+                placehold="Enter Your Text Here"
               />
             </div>
 
             <img src={imgMeme} alt="meme" />
           </div>
-          <button onClick={getPhoto}>Submit</button>
+          <button onClick={this.handleSubmit}>Submit</button>
         </header>
       </div>
     );
