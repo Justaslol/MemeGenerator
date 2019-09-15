@@ -34,7 +34,7 @@ class App extends React.Component {
       axios
         .get("http://localhost:4000/", {
           params: {
-            woman: "Meme Generator: YOU CANNOT LEAVE TEXT FIELDS EMPTY",
+            woman: "Meme Generator: YOU CANNOT LEAVE TEXT FIELDS EMPTY!",
             cat: "*Me just testing the Submit button*"
           }
         })

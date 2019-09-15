@@ -18,7 +18,12 @@ app.get("/", (req, res) => {
   jimp
     .read("womanyellingcat.jpg")
     .then(picture => {
-      res.send(picture.greyscale);
+      jimp.loadFont(jimp.FONT_SANS_16_BLACK).then(font => {
+        picture
+          .print(font, 10, 10, `${req.param("woman")}`, 390)
+          .print(font, 420, 10, `${req.param("cat")}`, 790)
+          .write("test.jpg");
+      });
     })
     .catch(err => {
       console.error(err);
