@@ -16,7 +16,7 @@ app.use(express.static("public"));
 
 app.get("/", (req, res) => {
   jimp
-    .read("womanyellingcat.jpg")
+    .read(__dirname + "/womanyellingcat.jpg")
     .then(picture => {
       jimp.loadFont(jimp.FONT_SANS_16_BLACK).then(font => {
         picture
@@ -32,6 +32,16 @@ app.get("/", (req, res) => {
     });
 });
 
-app.listen(4000, () => {
-  console.log("Listening on PORT 4000");
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("../client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
+
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log(`Listening on PORT ${PORT}`);
 });
