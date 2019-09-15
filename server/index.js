@@ -11,7 +11,7 @@ const origin =
 
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(cors({ origin }));
+app.use(cors());
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
