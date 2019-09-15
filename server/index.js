@@ -6,15 +6,15 @@ const jimp = require("jimp");
 
 const app = express();
 
+const origin =
+  process.env.NODE_ENV !== "production" ? "http://localhost:3000" : "prod-url";
+
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(cors());
+app.use(cors({ origin }));
+app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  // res.send({
-  //   woman: req.param("woman"),
-  //   cat: req.param("cat")
-  // });
   jimp
     .read("womanyellingcat.jpg")
     .then(picture => {
@@ -22,8 +22,10 @@ app.get("/", (req, res) => {
         picture
           .print(font, 10, 10, `${req.param("woman")}`, 390)
           .print(font, 420, 10, `${req.param("cat")}`, 790)
-          .write("test.jpg");
+          .write("./public/meme.jpg");
       });
+      res.type("png");
+      res.sendFile(__dirname + "/public/meme.jpg");
     })
     .catch(err => {
       console.error(err);
